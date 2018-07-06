@@ -1,0 +1,15 @@
+Let's start from the very beginning. Create the directory for the app and add initialize the git repository.
+
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/your-username/your-repo.git
+git push -u origin master
+
+We're going to use good old NPM so let's create a package.json file.
+
+There's a number of ways to go from here, but we're going to start by setting up our models in Mongoose. Create a folder called 'models' and a file in that folder called User.js.
+
+
+
+
