@@ -20,11 +20,11 @@ const UserSchema = new Schema({
 	password: {
 		type: String,
 		required: true
-	},
-	displayName: {
-		type: String,
-		required: true
 	}
+	// displayName: {
+	// 	type: String,
+	// 	required: true
+	// }
 });
 
 UserSchema.static('login', async function(usr, pwd){
@@ -51,7 +51,7 @@ UserSchema.static('signup', async function(usr, pwd){
 	}
 	const user = this.create({
 		username: usr,
-		pasword: hash.digest('hex')
+		password: hash.digest('hex')
 	});
 	return user;
 });

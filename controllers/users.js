@@ -51,10 +51,12 @@ api.post('/signup', async(req, res) => {
 	try{
 		const {session, body} = req;
 		const {username, password} = body;
+		console.log("Username before await: " + username);
+		console.log("Password before await: " + password);
 		const user = await User.signup(username, password);
 		res.status(201).json({ status: "User created." });
 	} catch(error){
-		res.status(403).json({ error: error.message });
+		res.status(403).json({ error: error.message + 'post route catch error' });
 	}
 });
 
