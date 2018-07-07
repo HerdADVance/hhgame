@@ -38,6 +38,8 @@ UserSchema.static('login', async function(usr, pwd){
 });
 
 UserSchema.static('signup', async function(usr, pwd){
+	console.log('Username in schema: ' + usr);
+	console.log('Password in schema: ' + pwd);
 	if(pwd.length < 6){
 		throw new Error('Password must have at least 6 characters');
 	}
@@ -61,7 +63,9 @@ UserSchema.method('changePass', async function(pwd){
 	const hash = crypto.createHash('sha256').update(String(pwd));
 	this.password = hash.digest('hex');
 	return this.save();
-})
+});
+
+
 
 
 module.exports = mongoose.model('User', UserSchema);

@@ -12,7 +12,7 @@ const api = require('./controllers/users');
 const app = express();
 
 // Database
-var mongoDB = 'mongodb://wcuser:7FGsha!9R3pE4Ui@ds139781.mlab.com:39781/worldcup'
+var mongoDB = 'mongodb://hhgameuser:3hd1!zjZreT!4@ds229701.mlab.com:29701/hhgame'
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;

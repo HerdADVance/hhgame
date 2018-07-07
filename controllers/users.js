@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/User');
 const api = express.Router();
+const util = require('util');
 
 const isLogged = ({ session }, res, next) => {
 	if(!session.user){
@@ -43,6 +44,10 @@ api.post('/logout', isLogged, (req, res) => {
 });
 
 api.post('/signup', async(req, res) => {
+	console.log('User Controller signup route');
+	console.log('User Controller signup route username: ' + req.body.username);
+	//console.log("REQ: " + req);
+	//console.log(util.inspect(req.body, false, null))
 	try{
 		const {session, body} = req;
 		const {username, password} = body;
@@ -58,4 +63,6 @@ api.get('/profile', isLogged, (req, res) => {
 	res.status(200).json({ user });
 });
 
+
 module.exports = api;
+
