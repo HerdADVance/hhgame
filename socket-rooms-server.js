@@ -6,7 +6,7 @@ const io = require('socket.io')();
 const app = http.createServer((req, res) => {
 	if(req.url === '/'){
 		fs.readFile(
-			path.resolve(__dirname, 'socket-namespace-client.html'),
+			path.resolve(__dirname, 'socket-rooms-client.html'),
 			(err, data) => {
 				if(err){
 					res.writeHead(500);
@@ -24,22 +24,23 @@ const app = http.createServer((req, res) => {
 
 io.path('/socket.io');
 
-io.of('/en').on('connection', (socket) => {
-	socket.on('getData', () => {
-		socket.emit('data', {
-			title: 'English page',
-			msg: 'Welcome to the site.'
-		});
-	});
-});
+const root = io.of('/');
 
-io.of('/es').on('connection', (socket) => {
-	socket.on('getData', () => {
-		socket.emit('data', {
-			title: 'Spanish page',
-			msg: 'Bienvenido a la sitio.'
-		});
-	});
+const notifyClients = () => {
+	root.clients((error, clients) => {
+		if(error) throw error;
+		root.to('commonRoom').emit(
+			'updateClientCount',
+			clients.length
+		)
+	})
+};
+
+root.on('connection', socket => {
+	socket.join('commonRoom');
+	socket.emit('welcome', `Welcome client: ${socket.id}`);
+	socket.on('disconnect', notifyClients);
+	notifyClients();
 });
 
 io.attach(app.listen(7777, () => {
