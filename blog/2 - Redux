@@ -1,0 +1,33 @@
+3 CORE PRINCIPLES OF REDUX
+
+* Single Source of truth. All within one store.
+
+* State is read only. Only dispatching action can change state tree.
+
+* Changes made with pure functions called reducers. 
+Reducers accept: Previous State & Action
+Reducers return new State. They don't mutate previous one.
+
+
+
+Reducers work like Array.prototype.reduce function.
+Executes function for every item in array to reduce to a single value.
+
+const reducer = (prevState, action) => newState
+
+
+
+Actions are plain objects. They require 1 property, "type"
+
+const action = {
+	type: 'INCREMENT_COUNTER',
+	incrementBy: 2
+}
+
+
+Creators are functions that return actions.
+
+const increment = (incrementBy) => ({
+	type: 'INCREMENT_COUNTER',
+	incrementBy
+})
