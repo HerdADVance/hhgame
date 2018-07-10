@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Socket Client</title>
+
+	<script src="http://localhost:7777/socket.io/socket.io.js"></script>
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+	
+	<h1 id="title">Welcome</h1>
+	
+	<form id="loginForm" disabled>
+		<input type="text" name="username" placeholder="username" />
+		<input type="password" name="password" placeholder="password" />
+		<input type="submit" value="Log In" />
+		<output name="logErrors"></output>
+	</form>
+
+	<form id="logoutForm">
+		<input type="submit" value="Log Out" />
+	</form>
+
+	
+	<script type="text/babel">
+		const title = document.getElementById('title');
+		const error = document.getElementsByName('logErrors')[0];
+		const loginForm = document.getElementById('loginForm');
+		const logoutForm = document.getElementById('logoutForm');
+		
+		const manager = new io.Manager(
+			'http://localhost:7777',
+			{path: '/socket.io'}
+		);
+
+		const namespace = {
+			home: manager.socket('/home'),
+			login: manager.socket('/login'),
+			logout: manager.socket('/logout')
+		};
+
+		namespace.home.on('welcome', (msg) => {
+			console.log("WELCOME");
+			title.textContent = msg;
+			error.textContent = '';
+		});
+
+		namespace.login.on('loginSuccess', () => {
+			console.log("LOGIN SUCCESS");
+			namespace.home.connect();
+		});
+
+		namespace.login.on('loginError', (err) => {
+			error.textContent = err.message;
+		});
+
+		namespace.logout.on('loggedOut', (msg) => {
+			namespace.home.connect();
+			title.textContent = msg.message;
+		});
+
+		loginForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const body = new FormData(loginForm);
+			namespace.login.emit('enter', {
+				username: body.get('username'),
+				password: body.get('password')
+			});
+			
+		});
+
+		logoutForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			namespace.logout.emit('exit');
+		})
+
+	</script>
+</body>
+</html>
