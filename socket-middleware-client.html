@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Socket Client</title>
+
+	<script src="http://localhost:7777/socket.io/socket.io.js"></script>
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+	
+	<h1 id="title"></h1>
+	
+	<form id="loginForm" disabled>
+		<input type="text" name="username" placeholder="username" />
+		<input type="password" name="password" placeholder="password" />
+		<input type="submit" value="Log In" />
+		<output name="logs"></output>
+	</form>
+
+	
+	<script type="text/babel">
+		const title = document.getElementById('title');
+		const logs = document.getElementsByName('logs')[0];
+		const loginForm = document.getElementById('loginForm');
+		
+		const manager = new io.Manager(
+			'http://localhost:7777',
+			{path: '/socket.io'}
+		);
+
+		const namespace = {
+			home: manager.socket('/home'),
+			login: manager.socket('/login')
+		};
+
+		namespace.home.on('connect', () => {
+			title.textContent = "Connected to Home.";
+			logs.textContent = "";
+		});
+
+		namespace.login.on('loginSuccess', () =>{
+			namespace.home.connect();
+		});
+
+		namespace.login.on('loginError', (err) =>{
+			logs.textContent = err.message;
+		});
+
+
+		loginForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const body = new FormData(loginForm);
+			namespace.login.emit('tryLogin', {
+				username: body.get('username'),
+				password: body.get('password')
+			});
+			
+		})
+	</script>
+
+</body>
+</html>
