@@ -62,7 +62,7 @@ namespace.login.on('connection', socket => {
 				message: 'Banned user.'
 			})
 		} else{
-			next();
+			//next();
 		}
 	});
 	socket.on('tryLogin', userData => {
