@@ -31,3 +31,13 @@ const increment = (incrementBy) => ({
 	type: 'INCREMENT_COUNTER',
 	incrementBy
 })
+
+
+
+Redux Cycle from Timer example
+
+1. "Set Time" Action Creator is sent to Dispatcher
+2. Dispatcher sends the current state and "Set Time" to the Reducer
+3. Reducer does a case/switch Action and returns merged state to Dispatcher.
+4. Dispatcher sends merged state to onStateChange function.
+5. onStateChange does logic and updates view.
