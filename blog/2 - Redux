@@ -56,3 +56,12 @@ const store = createStore(reducer, preloadedState(optional), enhancer(optional) 
 3. store.subscribe(listener)
 4. store.replaceReducer(reducer)
 
+
+
+You can bind action creators to the dispatch method with Redux to prevent unnecessary steps
+
+bindActionCreators(actionCreators, dispatchMethod)
+
+const store = createStore(reducer);
+const originialActions = require('/.actions')
+const actions = bindActionCreators(originalActions, store.dispatch)

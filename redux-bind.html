@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Redux</title>
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+	<script src="/lib/redux.js"></script>
+</head>
+<body>
+	
+	<h1>List</h1>
+	
+	<form id="item-form">
+		<input id="item-input" name="item" />
+		<input type="submit" value="Add to List" />
+	</form>
+
+	<ul id="list"></ul>
+
+	<script type="text/babel">
+
+		const form = document.querySelector('#item-form');
+		const input = document.querySelector('#item-input');
+		const list = document.querySelector('#list');
+
+		const initialState = {
+			items: []
+		};
+
+		// Action types
+		const TYPE = {
+			ADD_ITEM: 'ADD_ITEM'
+		}
+
+		const actions = {
+			addItem: (text) => ({
+				type: TYPE.ADD_ITEM,
+				text
+			})
+		}
+
+		// Reducer using ES6 spread operator to merge previous state with next state
+		const reducer = (state = initialState, action) => {
+			switch(action.type){
+				case TYPE.ADD_ITEM:
+					return {
+						items: [...state.items, action.text].splice(-5)
+					}
+				default:
+					return state;
+			}
+		}
+
+		const {createStore, bindActionCreators} = Redux;
+		const store = createStore(reducer);
+		const {addItem} = bindActionCreators(
+			actions,
+			store.dispatch
+		);
+
+		// Callback function subscribed to changes of Store. This will update view according to changes in Store.
+		store.subscribe(() => {
+			const {items} = store.getState();
+
+			items.forEach((itemText, index) => {
+				const li = (
+					list.children.item(index) ||
+					document.createElement('li')
+				)
+				li.textContent = itemText;
+				list.insertBefore(li, list.children.item(0));
+			})
+		});
+
+		// Event Listeners
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+			addItem(input.value);
+		});
+
+	</script>
+</body>
+</html>
