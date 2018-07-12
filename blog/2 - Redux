@@ -65,3 +65,19 @@ bindActionCreators(actionCreators, dispatchMethod)
 const store = createStore(reducer);
 const originialActions = require('/.actions')
 const actions = bindActionCreators(originalActions, store.dispatch)
+
+
+
+One giant Reducer function for all actions would be unwieldy.
+Break them up an then use Redux's combineReducers function to put them back together.
+Each reducer still only manages the slice of the state assigned to it.
+
+const reducer = combineReducers({
+	todoList: todoListReducer,
+	chatMessages: chatMessagesReducer
+})
+
+
+
+Store enhancers can expand the functionality of Redux by allowing the definition of Reducer functions in a Map JS native object.
+One application of a store enhancer is to "time travel" with Redux along with the Redux DevTools Extension
