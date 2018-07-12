@@ -41,3 +41,18 @@ Redux Cycle from Timer example
 3. Reducer does a case/switch Action and returns merged state to Dispatcher.
 4. Dispatcher sends merged state to onStateChange function.
 5. onStateChange does logic and updates view.
+
+
+
+
+The store is an object that provides a small API to put the reducer/dispatcher together.
+
+const store = createStore(reducer, preloadedState(optional), enhancer(optional) );
+
+4 methods exposed by createStore:
+
+1. store.dispatch(action)
+2. store.getState()
+3. store.subscribe(listener)
+4. store.replaceReducer(reducer)
+

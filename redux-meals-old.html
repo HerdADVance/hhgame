@@ -4,7 +4,6 @@
 	<meta charset="UTF-8">
 	<title>Redux</title>
 	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-	<script src="/lib/redux.js"></script>
 </head>
 <body>
 	
@@ -19,9 +18,7 @@
 
 	<script type="text/babel">
 		
-		const {createStore} = Redux;
-
-		const initialState = {
+		let state = {
 			kindOfMeal: null,
 			time: null
 		};
@@ -47,7 +44,7 @@
 		});
 
 		// Reducer using ES6 spread operator to merge previous state with next state
-		const reducer = (prevState = initialState, action) => {
+		const reducer = (prevState = state, action) => {
 			switch(action.type){
 				case SET_MEAL:
 					return {...prevState,
@@ -62,13 +59,8 @@
 			}
 		}
 
-		// New store from Redux
-		const store = createStore(reducer);
-
-		// Callback function subscribed to changes of Store. This will update view according to changes in Store.
-		store.subscribe(() => {
-			const nextState = store.getState();
-
+		// Function to call to change state
+		const onStateChange = (nextState) => {
 			const comparison = [
 				{time: '23:00:00', info: 'Too late for Dinner'},
 				{time: '18:00:00', info: 'Dinner time'},
@@ -82,20 +74,26 @@
 			meal.textContent = comparison.find((condition) => (
 				nextState.time >= condition.time
 			)).info
-		});
+		}
+
+		// Dispatch function
+		const dispatch = (action) => {
+			state = reducer(state, action);
+			onStateChange(state);
+		}
 
 		// Event Listeners
 		btnNoon.addEventListener('click', () => {
 			const time = new Date('1/1/1 12:00:00');
-			store.dispatch(setTime(time.toTimeString()));
+			dispatch(setTime(time.toTimeString()));
 		})
 		btnNight.addEventListener('click', () => {
 			const time = new Date('1/1/1 00:00:00');
-			store.dispatch(setTime(time.toTimeString()));
+			dispatch(setTime(time.toTimeString()));
 		})
 
-		// Dispatch action through the store
-		store.dispatch(setTime(new Date().toTimeString()))
+		// Dispatch the action
+		dispatch(setTime(new Date().toTimeString()))
 
 	</script>
 </body>
