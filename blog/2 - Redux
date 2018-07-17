@@ -81,3 +81,26 @@ const reducer = combineReducers({
 
 Store enhancers can expand the functionality of Redux by allowing the definition of Reducer functions in a Map JS native object.
 One application of a store enhancer is to "time travel" with Redux along with the Redux DevTools Extension
+
+
+
+
+applyMiddleware function allows you to define middleware functions.
+
+1. applyMiddleware function receives one ore more middleware functions as arguments.
+2. Each of those middleware functions is kept internally as array and mapped over.
+3. Composes functions to new value for Dispatch method through "Next" argument
+4. Middlweware function can interrupt chain if "Next" is not called.
+5. Must be careful to not create infinite loop.
+
+middleware = API => next => action => next(action)
+
+
+
+By default, Redux does not handle async data flow. Libraries out there to help. 
+
+1. Redux Thunk
+2. Redux Saga
+
+Last example in chapter builds own implementation using middleware to give DISPATCH method the ability to handle async.
+
